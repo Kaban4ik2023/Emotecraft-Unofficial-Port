@@ -35,7 +35,7 @@ jar {
     version = project.version.toString().split('-')[0]
     from('LICENSE')
     from('LICENSE-playerAnimator.txt')
-    from('README_RU.md')
+    from('README.md')
     manifest { attributes 'Implementation-Version': project.version }
 }
 jar.finalizedBy('reobfJar')
@@ -43,20 +43,9 @@ task sourcesJar(type: Jar) {
     version = project.version.toString().split('-')[0]
     classifier = 'sources'
     from sourceSets.main.allSource
-    exclude 'io/github/kosmx/emotes/legacy/smoke/**'
     from('LICENSE'); from('LICENSE-playerAnimator.txt')
 }
 build.dependsOn sourcesJar
-
-if (project.hasProperty('smoke')) {
-    sourceSets.main.java.srcDir 'src/smoke/java'
-    minecraft.runs.client.property 'emotecraft.smoke', 'true'
-    if(project.hasProperty('emotePack')) {
-        minecraft.runs.client.workingDirectory project.file('run-pack')
-        minecraft.runs.client.property 'emotecraft.testPack', project.property('emotePack')
-    }
-}
-jar { exclude 'io/github/kosmx/emotes/legacy/smoke/**' }
 
 // FG3's dev merge adds a non-Forge Side enum value. Repair only the local run copy.
 tasks.withType(JavaExec).matching { it.name in ['runClient', 'runServer'] }.all {

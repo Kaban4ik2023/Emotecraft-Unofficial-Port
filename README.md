@@ -1,69 +1,51 @@
-# Emotecraft (Unofficial Port) (1.12.2)
+# Emotecraft (Unofficial Port)
 
-Версия: 2.4.12-backport.4. Нужны Minecraft 1.12.2, Forge 14.23.5.2859 или новее и Java 8.
-Player Animator и другие библиотеки отдельно устанавливать не нужно.
+An unofficial port of Emotecraft 2.4.12 to **Minecraft 1.12.2**, maintained by **Kaban4ik**.
 
-Автор порта: Kaban4ik. Авторы оригинала: KosmX и Emotecraft contributors.
-Проект порта: https://github.com/Kaban4ik2023/Emotecraft-Unofficial-Port
+## Download and install
 
-## Скачать
+[Download Emotecraft-Unofficial-Port-2.4.12.jar](https://github.com/Kaban4ik2023/Emotecraft-Unofficial-Port/raw/refs/heads/main/downloads/Emotecraft-Unofficial-Port-2.4.12.jar)
 
-[Emotecraft-Unofficial-Port-2.4.12.jar](downloads/Emotecraft-Unofficial-Port-2.4.12.jar) — готовая сборка для Forge 1.12.2.
+Requires **Forge 14.23.5.2859 or newer for Minecraft 1.12.2** and **Java 8**. Place the JAR in your `mods` folder. No separate Player Animator installation is needed.
 
-## Установка
+Install the mod on both the server and clients to synchronize emotes. Without the server mod, emotes play locally.
 
-Скопируйте `Emotecraft-Unofficial-Port-2.4.12.jar` в папку `mods`.
-Для синхронизации между игроками установите тот же JAR на сервер и клиентам.
-Без серверного мода эмоции доступны локально.
+## Features
 
-## Управление
+- Emote wheel with three pages of eight slots and the original textures.
+- Searchable library with icons, animated previews and individual key bindings.
+- Import custom emotes and ZIP packs through the in-game file browser.
+- Body and limb bending, armor animation and held-item transforms.
+- Nine built-in emotes and support for accompanying PNG icons and NBS music.
 
-- **B** — удерживать для колеса эмоций; навести мышь и отпустить для запуска.
-- **N** — библиотека с иконками, поиском по названию/автору и анимированным предпросмотром.
-- **G** — остановить эмоцию. Движение, прыжок и полученный урон также останавливают её.
-- Отдельные клавиши для восьми слотов назначаются в настройках управления Minecraft.
-- Свои `.json`, `.emotecraft` и Quark `.emote` положите в `emotes` в папке игры, затем нажмите «Обновить».
-- Файл `.nbs` рядом с эмоцией с тем же именем добавляет музыку.
-- «Экспорт» сохраняет выбранную эмоцию как JSON в `emotes/_export`.
+## Controls
 
-Меню использует оригинальные текстуры колеса и иконки эмоций. ЛКМ по сектору назначает выбранную эмоцию, ПКМ очищает слот. Колесо мыши переключает три страницы по восемь слотов. Двойной щелчок по эмоции запускает её. В меню можно назначить отдельную клавишу для любой эмоции.
+| Key | Action |
+| --- | --- |
+| Hold **B** | Open the emote wheel; release to play the selected emote. |
+| **N** | Open the emote library and settings. |
+| **G** | Stop the current emote. |
 
-Кнопка «Загрузить» открывает файловый браузер внутри игры (по умолчанию — папку «Загрузки»). Можно импортировать JSON, EMOTECRAFT, EMOTE и ZIP-пакеты. Соседние PNG/NBS копируются вместе с одиночным файлом; исходники не изменяются. Для Quark EMOTE включите соответствующий параметр в настройках. Новые файлы в папке emotes автоматически появляются в открытом меню.
+In the library, select an emote and left-click a wheel slot to assign it. Right-click a slot to clear it. Scroll over the wheel to switch pages. Double-click an emote to play it.
 
-Кнопка «Настройки» позволяет менять светлую/тёмную текстуру колеса, иконки, предпросмотр, камеру, музыку, показ других игроков, остановку при движении, встроенные эмоции и параметры загрузки. Настройки и отдельные клавиши сохраняются в config/emotecraft-interface.properties.
+You can also place `.json`, `.emotecraft` or Quark `.emote` files in the game's `emotes` folder. Enable Quark support in settings when importing `.emote` files. Companion `.png` and `.nbs` files must have the same base name as the emote.
 
-Встроены все девять эмоций исходного проекта. Колесо сохраняется в `config/emotecraft-wheel.properties`.
-Основные параметры загрузки находятся в `config/emotecraft.json`.
+## Compatibility
 
-## Особенности версии 1.12.2
+This is an independent port, not an official KosmX release. The interface and features differ from newer Minecraft versions. Multiplayer emotes are limited to 32,767 serialized bytes; larger emotes play locally. Modern first-person effects, server emote catalogs and integrations with other mods are not included. OptiFine and shader compatibility has not been verified.
 
-Переиспользованы форматы анимаций, интерполяция Player Animator 2.0.1, сериализация и протокол Emotecraft 2.4.12.
-Интерфейс и подключение к Forge переписаны для 1.12.2. Рендер поддерживает движения частей тела,
-перемещение и поворот всего персонажа, сгибание тела, рук и ног, броню и внешний слой скина.
-Предметы следуют сгибам рук и собственным ключевым кадрам. При запуске включается вид от третьего лица.
+## Build
 
-Это самостоятельная адаптация, а не официальная сборка KosmX. Интерфейс отличается от 1.21.1.
-Устаревший сетевой канал ограничен 32767 байтами на эмоцию; более крупные эмоции воспроизводятся только локально.
-Все 223 JSON-файла тестового SPEMOTES_PLUS_FLAT проходят этот лимит после сериализации.
-ZIP-пакеты импортируются по одному файлу без загрузки всего распакованного архива в память.
-Лимиты импорта: 256 МБ распакованных данных, 2048 записей, 4 МБ на отдельный файл.
-Дополнительные современные инструменты NBS заменяются арфой. Современные эффекты
-первого лица, серверные команды 1.21, каталог серверных эмоций и интеграции с другими модами не перенесены.
-Совместимость с OptiFine, шейдерами и модами, заменяющими модель игрока, отдельно не проверена.
+Set `JAVA_HOME` to a **JDK 8** installation, then run:
 
-## Сборка из исходников
-
-Укажите JDK 8 в `JAVA_HOME`, затем из этой папки выполните:
-
-```bat
-gradlew.bat clean build
+```sh
+./gradlew build
 ```
 
-JAR появится в `build/libs`. Тестовый запуск клиента: `gradlew.bat runClient`.
-Автоматическая проверка на отдельном тестовом мире: `gradlew.bat runClient -Psmoke`.
-Тестовый мод не включается в распространяемый JAR.
+On Windows, use `gradlew.bat build`. Built JARs are placed in `build/libs`. Use `gradlew runClient` to launch the development client.
 
-Исходный проект: https://github.com/KosmX/emotes (GPL-3.0).
-Ядро Player Animator: https://github.com/KosmX/minecraftPlayerAnimator (MIT).
-Копии общих исходников находятся в `src/main/java/io/github/kosmx/emotes`,
-ядро анимаций — в `src/main/java/dev/kosmx/playerAnim`, адаптация — в пакете `legacy`.
+## Credits and license
+
+- **Kaban4ik** — unofficial Forge 1.12.2 port.
+- **KosmX and Emotecraft contributors** — [original Emotecraft](https://github.com/KosmX/emotes), licensed under [GPL-3.0](LICENSE).
+- [Player Animator](https://github.com/KosmX/minecraftPlayerAnimator) — animation core, licensed under [MIT](LICENSE-playerAnimator.txt).
