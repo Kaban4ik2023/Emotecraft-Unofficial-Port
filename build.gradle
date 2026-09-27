@@ -1,0 +1,82 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net/' }
+        mavenCentral()
+    }
+    dependencies { classpath 'net.minecraftforge.gradle:ForgeGradle:3.0.197' }
+}
+apply plugin: 'net.minecraftforge.gradle'
+version = '2.4.12-backport.4'
+group = 'io.github.kosmx.emotes'
+archivesBaseName = 'Emotecraft-Unofficial-Port'
+sourceCompatibility = targetCompatibility = '1.8'
+minecraft {
+    mappings channel: 'stable', version: '39-1.12'
+    runs {
+        client { workingDirectory project.file('run'); jvmArgs '-Xmx1G' }
+        server { workingDirectory project.file('run-server'); jvmArgs '-Xmx1G' }
+    }
+}
+repositories { mavenCentral() }
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+    compileOnly 'org.jetbrains:annotations:24.1.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.4'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.4'
+}
+test { useJUnitPlatform() }
+if (project.hasProperty('emotePack')) test { systemProperty 'emotecraft.testPack', project.property('emotePack'); maxHeapSize = '1G' }
+tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+sourceSets.main.output.resourcesDir = file("$buildDir/classes/java/main")
+jar {
+    version = project.version.toString().split('-')[0]
+    from('LICENSE')
+    from('LICENSE-playerAnimator.txt')
+    from('README_RU.md')
+    manifest { attributes 'Implementation-Version': project.version }
+}
+jar.finalizedBy('reobfJar')
+task sourcesJar(type: Jar) {
+    version = project.version.toString().split('-')[0]
+    classifier = 'sources'
+    from sourceSets.main.allSource
+    exclude 'io/github/kosmx/emotes/legacy/smoke/**'
+    from('LICENSE'); from('LICENSE-playerAnimator.txt')
+}
+build.dependsOn sourcesJar
+
+if (project.hasProperty('smoke')) {
+    sourceSets.main.java.srcDir 'src/smoke/java'
+    minecraft.runs.client.property 'emotecraft.smoke', 'true'
+    if(project.hasProperty('emotePack')) {
+        minecraft.runs.client.workingDirectory project.file('run-pack')
+        minecraft.runs.client.property 'emotecraft.testPack', project.property('emotePack')
+    }
+}
+jar { exclude 'io/github/kosmx/emotes/legacy/smoke/**' }
+
+// FG3's dev merge adds a non-Forge Side enum value. Repair only the local run copy.
+tasks.withType(JavaExec).matching { it.name in ['runClient', 'runServer'] }.all {
+    doFirst {
+        classpath = files(classpath.files.collect { original ->
+            if (!original.name.contains('forge-1.12.2-14.23.5.2860_mapped') || !original.name.endsWith('.jar')) return original
+            def official = new File(gradle.gradleUserHomeDir, 'caches/forge_gradle/maven_downloader/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860-universal.jar')
+            def output = file("$buildDir/dev-runtime/forge-dev.jar")
+            output.parentFile.mkdirs()
+            def source = new java.util.zip.ZipFile(original)
+            def forge = new java.util.zip.ZipFile(official)
+            def target = new java.util.zip.ZipOutputStream(new FileOutputStream(output))
+            try {
+                source.entries().each { entry ->
+                    target.putNextEntry(new java.util.zip.ZipEntry(entry.name))
+                    def stream = entry.name == 'net/minecraftforge/fml/relauncher/Side.class' ? forge.getInputStream(forge.getEntry(entry.name)) : source.getInputStream(entry)
+                    stream.withCloseable { target << it }; target.closeEntry()
+                }
+            } finally { target.close(); source.close(); forge.close() }
+            return output
+        })
+    }
+}
