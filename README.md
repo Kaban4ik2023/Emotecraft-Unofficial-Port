@@ -4,7 +4,7 @@ An unofficial port of Emotecraft 2.4.12 to **Minecraft 1.12.2**, maintained by *
 
 ## Download and install
 
-[Download Emotecraft-Unofficial-Port-2.4.12.jar](https://github.com/Kaban4ik2023/Emotecraft-Unofficial-Port/raw/refs/heads/main/downloads/Emotecraft-Unofficial-Port-2.4.12.jar)
+[Download Emotecraft-Unofficial-Port-2.4.12.jar](https://github.com/Kaban4ik2023/Emotecraft-Unofficial-Port/releases/latest/download/Emotecraft-Unofficial-Port-2.4.12.jar)
 
 Requires **Forge 14.23.5.2859 or newer for Minecraft 1.12.2** and **Java 8**. Place the JAR in your `mods` folder. No separate Player Animator installation is needed.
 
@@ -32,7 +32,7 @@ You can also place `.json`, `.emotecraft` or Quark `.emote` files in the game's 
 
 ## Compatibility
 
-This is an independent port, not an official KosmX release. The interface and features differ from newer Minecraft versions. Multiplayer emotes are limited to 32,767 serialized bytes; larger emotes play locally. Modern first-person effects, server emote catalogs and integrations with other mods are not included. OptiFine and shader compatibility has not been verified.
+This is an independent port, not an official KosmX release. The interface and features differ from newer Minecraft versions. Client emote uploads are limited to 32,767 serialized bytes; larger emotes play locally. Modern first-person effects, server emote catalogs and integrations with other mods are not included. OptiFine and shader compatibility has not been verified.
 
 ## Build
 

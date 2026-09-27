@@ -6,7 +6,7 @@ buildscript {
     dependencies { classpath 'net.minecraftforge.gradle:ForgeGradle:3.0.197' }
 }
 apply plugin: 'net.minecraftforge.gradle'
-version = '2.4.12-backport.4'
+version = '2.4.12-backport.5'
 group = 'io.github.kosmx.emotes'
 archivesBaseName = 'Emotecraft-Unofficial-Port'
 sourceCompatibility = targetCompatibility = '1.8'

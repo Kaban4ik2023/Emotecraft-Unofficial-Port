@@ -17,6 +17,9 @@ import java.util.*;
 /** Original Emotecraft wire format on the legacy Forge custom-payload channel. */
 public final class LegacyNetwork {
     public static final int LIMIT = 32767;
+    // Minecraft 1.12.2 permits larger payloads from the server. Relaying adds
+    // the authenticated player's UUID and flags to a client animation packet.
+    public static final int CLIENTBOUND_LIMIT = 1048576;
     public static final String CHANNEL = "emotecraft:emote";
     private FMLEventChannel channel;
     private final Map<UUID, EntityPlayerMP> clients = new HashMap<>();
@@ -29,7 +32,13 @@ public final class LegacyNetwork {
     }
     public void clear() { clients.clear(); playing.clear(); lastPacket.clear(); }
     public static byte[] encode(EmotePacket.Builder builder) throws IOException {
-        ByteBuffer buffer = builder.build(LIMIT).write();
+        return encode(builder, LIMIT);
+    }
+    public static byte[] encodeForClient(EmotePacket.Builder builder) throws IOException {
+        return encode(builder, CLIENTBOUND_LIMIT);
+    }
+    private static byte[] encode(EmotePacket.Builder builder, int limit) throws IOException {
+        ByteBuffer buffer = builder.build(limit).write();
         byte[] bytes = new byte[buffer.remaining()]; buffer.get(bytes); return bytes;
     }
     private FMLProxyPacket packet(byte[] bytes) {
@@ -39,7 +48,7 @@ public final class LegacyNetwork {
         channel.sendToServer(packet(encode(builder)));
     }
     private void send(EntityPlayerMP player, EmotePacket.Builder builder) {
-        try { channel.sendTo(packet(encode(builder)), player); }
+        try { channel.sendTo(packet(encodeForClient(builder)), player); }
         catch (IOException ex) { Emotecraft.log.warn("Emote too large for the legacy channel", ex); }
     }
     private EmotePacket.Builder config() {
@@ -74,18 +83,18 @@ public final class LegacyNetwork {
         }
     }
     @SubscribeEvent public void client(FMLNetworkEvent.ClientCustomPacketEvent event) {
-        byte[] bytes = copy(event.getPacket());
+        byte[] bytes = copy(event.getPacket(), CLIENTBOUND_LIMIT);
         if (bytes != null) Emotecraft.proxy.receive(bytes);
     }
     @SubscribeEvent public void server(FMLNetworkEvent.ServerCustomPacketEvent event) {
-        byte[] bytes = copy(event.getPacket());
+        byte[] bytes = copy(event.getPacket(), LIMIT);
         if (bytes == null || !(event.getHandler() instanceof NetHandlerPlayServer)) return;
         EntityPlayerMP sender = ((NetHandlerPlayServer) event.getHandler()).player;
         sender.getServerWorld().addScheduledTask(() -> handle(sender, bytes));
     }
-    private byte[] copy(FMLProxyPacket packet) {
+    private byte[] copy(FMLProxyPacket packet, int limit) {
         int length = packet.payload().readableBytes();
-        if (length < 6 || length > LIMIT) return null;
+        if (length < 6 || length > limit) return null;
         byte[] bytes = new byte[length];
         packet.payload().getBytes(packet.payload().readerIndex(), bytes); return bytes;
     }

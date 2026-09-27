@@ -3,7 +3,7 @@
     "modid": "emotecraft",
     "name": "Emotecraft (Unofficial Port) (1.12.2)",
     "description": "Emotecraft 2.4.12 backport for Minecraft 1.12.2. Custom emotes, wheel and multiplayer synchronization.",
-    "version": "2.4.12-backport.4",
+    "version": "2.4.12-backport.5",
     "mcversion": "1.12.2",
     "authorList": [
       "KosmX",

@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.event.*;
 import java.nio.file.Path;
 import java.util.logging.Level;
 
-@Mod(modid = "emotecraft", name = "Emotecraft (Unofficial Port) (1.12.2)", version = "2.4.12-backport.4",
+@Mod(modid = "emotecraft", name = "Emotecraft (Unofficial Port) (1.12.2)", version = "2.4.12-backport.5",
      guiFactory = "io.github.kosmx.emotes.legacy.client.LegacyGuiFactory",
      acceptedMinecraftVersions = "[1.12.2]", acceptableRemoteVersions = "*",
      dependencies = "required-after:forge@[14.23.5.2859,)")

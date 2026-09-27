@@ -88,6 +88,7 @@ public class KeyframeAnimationPlayer implements IActualAnimation<KeyframeAnimati
 
         this.currentTick = t;
         if(isInfinite() && t > data.returnToTick){
+            isLoopStarted = t > data.endTick;
             currentTick = (t - data.returnToTick)%(data.endTick - data.returnToTick + 1) + data.returnToTick;
         }
     }
